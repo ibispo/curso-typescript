@@ -6,8 +6,8 @@ class NegociacaoController {
 
     private _negociacaoLista = new NegociacaoLista();
 
-    private _negociacaoView = new NegociacaoView('#tabNeg');
-    private _mensagemView = new MensagemView("#msg");
+    private _negociacaoView = new Views.NegociacaoView('#tabNeg');
+    private _mensagemView = new Views.MensagemView("#msg");
 
 
     constructor() {
