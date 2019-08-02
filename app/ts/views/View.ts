@@ -1,21 +1,34 @@
-namespace Views {
-    
-    export abstract class View<T> {
+import { logTempoExec } from '../helpers/decorators/LogTempoExec';
+
+export abstract class View<T> {
     
         private _element: JQuery;
+        private _escapar: boolean;
     
-        constructor( compon: string ) {
+        /*
+            "?" indica que o parâmetro é opcional. O valor é "undefined"
+            Parametros opcionais devem ser os últimos da assinatura
+        */
+        constructor( compon: string, escap: boolean = false ) {
             this._element = $(compon);
+            this._escapar = escap;
         }
     
+        // Decorator "experimental" ES5
+        @logTempoExec()
         update( modelo: T ): void {
-            this._element.html(this._template(modelo));
+
+            let templ = this._template(modelo);
+
+            if ( this._escapar )
+                templ = templ.replace(/<script>[\s\S]*?<\/script>/g, '');
+
+            this._element.html( templ );
+
         }
     
         // Métodos abstratos
         abstract _template( mod: T ): string;
     
     }
-
-}    
 

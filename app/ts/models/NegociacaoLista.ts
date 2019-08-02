@@ -1,4 +1,6 @@
-class NegociacaoLista {
+import { Negociacao } from './Negociacao';
+
+export class NegociacaoLista {
 
     private _negociacaoLista: Negociacao[] = [];
 
@@ -7,7 +9,7 @@ class NegociacaoLista {
     }
 
     paraArray(): Negociacao[] {
-        return [].concat( this._negociacaoLista );
+        return ([] as Negociacao[]).concat( this._negociacaoLista );
     }
 
 

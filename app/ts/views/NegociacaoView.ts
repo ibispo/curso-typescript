@@ -1,11 +1,10 @@
-namespace Views {
+import { View } from './View';
+import { NegociacaoLista } from '../models/NegociacaoLista';
 
-    import View = Views.View;
+export class NegociacaoView extends View<NegociacaoLista> {
 
-    export class NegociacaoView extends View<NegociacaoLista> {
-        
         _template( lista: NegociacaoLista ): string {
-    
+
             return `
                 <table class="table table-hover table-bordered">
                     <thead>
@@ -36,10 +35,8 @@ namespace Views {
                     </tfoot>
                 </table>
             `;
-    
-        }
-
-}
+  
+    }
 
 
 

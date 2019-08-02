@@ -1,24 +1,23 @@
-class Negociacao {
+export class Negociacao {
 
     constructor ( 
-        private _dt: Date, 
-        private _qtd: number, 
-        private _vlr: number ) {}
+        readonly data: Date, 
+        readonly quantidade: number, 
+        readonly valor: number ) {}
 
-    get data() {
-        return this._dt;
-    }
+    /*
 
-    get quantidade() {
-        return this._qtd;
-    }
+        Um objeto onde temos que apenas ler suas propriedades, no construtor colocamos
+        "readonly" para essas propriedades. Neste caso, não é necessário implementar
+        os getters das propriedades
+        -----------------------------------------------------
+        Se não queremos que as propriedades sejam visualizadas fora da nossa classe,
+        aí devemos colocar como "private" e implementar os getters necessários
 
-    get valor() {
-        return this._vlr;
-    }
+    */
 
     get volume() {
-        return this._qtd * this._vlr;
+        return this.quantidade * this.valor;
     }
 
 }
