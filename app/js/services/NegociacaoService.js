@@ -11,7 +11,7 @@ System.register(["../models/index"], function (exports_1, context_1) {
         execute: function () {
             NegociacaoService = class NegociacaoService {
                 obterListaNegociacao(handler) {
-                    return fetch('http://localhost:8082/dadosx')
+                    return fetch('http://localhost:8082/dados')
                         .then(res => handler(res))
                         .then(res => res.json())
                         .then((listaDado) => listaDado

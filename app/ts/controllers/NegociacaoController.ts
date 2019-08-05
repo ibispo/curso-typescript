@@ -67,25 +67,46 @@ export class NegociacaoController {
     }
 
     @throttle()
-    importarDados() {
+    async importarDados() {
         
-        this._negociacaoService
-            .obterListaNegociacao( res => {
-                    if ( res.ok ) 
-                        return res;
-                    throw new Error(`Falha de resposta da API: ${res.statusText}`);
-                })
-                .then( (negocLista: Negociacao[]) => {
+        /*
+            async ... await
+            ---------------
+            Você espera a <Promise> ser executada e vai suspender a execução deste método
 
-                    const listaNegAtual = this._negociacaoLista.paraArray();
-                    negocLista
-                        .filter(negoc => 
-                            !listaNegAtual.some(negAtual => negoc.isEquals(negAtual)))
-                        .forEach(negoc => this._negociacaoLista.adicionar(negoc));
+            O método será suspenso (limbo), a aplicação continuará rodando normalmente.
 
-                    this._negociacaoView.update(this._negociacaoLista);
-                })
-                .catch(err0 => this._mensagemView.update(err0.message)) ; 
+            Quando a <Promise> for resolvida, o código volta para a pilha de execução.
+
+            O que capturaria no .then(), ele resolve no retorno da <Promise> e continua
+            o fluxo normal. 
+
+            Ele funciona como sync, mas é async
+
+            Podemos usar try {} catch, o que seria impossível utilizar em async
+
+        */
+
+        try {
+
+            const listaNegImportar = await this._negociacaoService
+                .obterListaNegociacao( res => {
+                        if ( res.ok ) 
+                            return res;
+                        throw new Error(`Falha de resposta da API: ${res.statusText}`);
+                    });
+    
+            const listaNegAtual = this._negociacaoLista.paraArray();
+            listaNegImportar
+                .filter(negoc => 
+                    !listaNegAtual.some(negAtual => negoc.isEquals(negAtual)))
+                .forEach(negoc => this._negociacaoLista.adicionar(negoc));
+    
+            this._negociacaoView.update(this._negociacaoLista);
+
+        } catch (err) {
+            this._mensagemView.update(err.message);
+        }
     }
 
 }    
