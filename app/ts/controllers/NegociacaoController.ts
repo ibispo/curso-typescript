@@ -1,11 +1,22 @@
 import { NegociacaoView, MensagemView } from '../views/index';
 import { Negociacao, NegociacaoLista } from '../models/index';
-// import { logTempoExec } from '../helpers/decorators/LogTempoExec';
+import { domInject, meuDecoratorDeClasse, throttle } from '../helpers/decorators/index';
+import { NegociacaoParcial } from '../models/index';
+import { NegociacaoService, HandlerFunction } from '../services/index';
+import { mostrarConsole } from '../helpers/index';
 
+let timerExec = 0;
+
+@meuDecoratorDeClasse()
 export class NegociacaoController {
 
+    @domInject('#data')
     private _inputData: JQuery;
+
+    @domInject('#quantidade')
     private _inputQuantidade: JQuery;
+
+    @domInject('#valor')
     private _inputValor: JQuery;
 
     private _negociacaoLista = new NegociacaoLista();
@@ -13,22 +24,20 @@ export class NegociacaoController {
     private _negociacaoView = new NegociacaoView('#tabNeg');
     private _mensagemView = new MensagemView("#msg");
 
+    private _negociacaoService = new NegociacaoService();
+
+    // Lazy DOM --- Carregamento "preguiçoso" dos elementos do DOM
 
     constructor() {
-
-        
-        this._inputData = $("#data");
-        this._inputQuantidade = $("#quantidade");
-        this._inputValor = $("#valor");
         this._negociacaoView.update( this._negociacaoLista );
-
     }
 
     // Decorator "experimental" ES5
     // @logTempoExec()
-    adicionar( event: Event ) {
+    // @throttle(1000)
+    adicionar(event: Event) {
 
-        event.preventDefault();
+        event.preventDefault();  // TIRAR se incluir no throttle()
 
         let dt = new Date( this._inputData.val().replace(/-/g,',') );    // AAAA-MM-DD
         if ( !this._isDiaUtil(dt) ) {
@@ -43,6 +52,10 @@ export class NegociacaoController {
         );
 
         this._negociacaoLista.adicionar(negoc);
+
+        mostrarConsole(negoc, this._negociacaoLista);
+
+
         this._negociacaoView.update(this._negociacaoLista);
         this._mensagemView.update("Negociação adicionada!");
 
@@ -53,7 +66,29 @@ export class NegociacaoController {
             dt.getDay() != DiaSemanaEnum.DOMINGO;
     }
 
-}
+    @throttle()
+    importarDados() {
+        
+        this._negociacaoService
+            .obterListaNegociacao( res => {
+                    if ( res.ok ) 
+                        return res;
+                    throw new Error(`Falha de resposta da API: ${res.statusText}`);
+                })
+                .then( (negocLista: Negociacao[]) => {
+
+                    const listaNegAtual = this._negociacaoLista.paraArray();
+                    negocLista
+                        .filter(negoc => 
+                            !listaNegAtual.some(negAtual => negoc.isEquals(negAtual)))
+                        .forEach(negoc => this._negociacaoLista.adicionar(negoc));
+
+                    this._negociacaoView.update(this._negociacaoLista);
+                })
+                .catch(err0 => this._mensagemView.update(err0.message)) ; 
+    }
+
+}    
 
 enum DiaSemanaEnum {
     DOMINGO, SEGUNDA, TERCA, QUARTA, QUINTA, SEXTA, SABADO

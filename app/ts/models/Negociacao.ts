@@ -1,9 +1,8 @@
-export class Negociacao {
+import { MyObject } from './MyObject';
 
-    constructor ( 
-        readonly data: Date, 
-        readonly quantidade: number, 
-        readonly valor: number ) {}
+export class Negociacao implements MyObject<Negociacao> {
+
+    constructor ( readonly data: Date, readonly quantidade: number, readonly valor: number ) {}
 
     /*
 
@@ -19,5 +18,23 @@ export class Negociacao {
     get volume() {
         return this.quantidade * this.valor;
     }
+
+    toText(): void {
+        console.log("Impressão: -------------------");
+        console.log(
+`Data: ${this.data}
+Quantidade: ${this.quantidade}
+Valor: ${this.valor}
+Volume: ${this.volume}`       
+        );
+    }
+
+    isEquals(obj: Negociacao): boolean {
+        return this.data.getDate() == obj.data.getDate() &&
+            this.data.getMonth() == obj.data.getMonth() &&
+            this.data.getFullYear() == obj.data.getFullYear();
+    }
+
+
 
 }

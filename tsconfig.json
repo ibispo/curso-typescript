@@ -1,12 +1,12 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "es6",  // ECMAScript 2015
         "outDir": "app/js",
         "noEmitOnError": true,
-        "noImplicitAny": true,
+        "noImplicitAny": true, /* ativação dessas configurações poderá gerar inúmeros problemas com possíveis definições que você venha a baixar */
         "removeComments": true,
         "module": "system",
-        "strictNullChecks": true,
+        "strictNullChecks": true, /* ativação dessas configurações poderá gerar inúmeros problemas com possíveis definições que você venha a baixar */
         "experimentalDecorators": true
     },
     "include": [
