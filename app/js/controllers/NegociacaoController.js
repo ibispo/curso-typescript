@@ -81,6 +81,21 @@ System.register(["../views/index", "../models/index", "../helpers/decorators/ind
                         }
                     });
                 }
+                buscarCEP() {
+                    return __awaiter(this, void 0, void 0, function* () {
+                        try {
+                            yield this._negociacaoService
+                                .obterCEP(res => {
+                                if (res.ok)
+                                    return res;
+                                throw new Error(`Falha de resposta da API: ${res.statusText}`);
+                            }, this._inputCEP.val());
+                        }
+                        catch (err) {
+                            this._mensagemView.update(err.message);
+                        }
+                    });
+                }
             };
             __decorate([
                 index_3.domInject('#data')
@@ -91,6 +106,9 @@ System.register(["../views/index", "../models/index", "../helpers/decorators/ind
             __decorate([
                 index_3.domInject('#valor')
             ], NegociacaoController.prototype, "_inputValor", void 0);
+            __decorate([
+                index_3.domInject('#cep')
+            ], NegociacaoController.prototype, "_inputCEP", void 0);
             __decorate([
                 index_3.throttle()
             ], NegociacaoController.prototype, "importarDados", null);

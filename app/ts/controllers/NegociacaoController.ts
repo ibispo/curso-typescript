@@ -19,6 +19,9 @@ export class NegociacaoController {
     @domInject('#valor')
     private _inputValor: JQuery;
 
+    @domInject('#cep')
+    private _inputCEP: JQuery;
+
     private _negociacaoLista = new NegociacaoLista();
 
     private _negociacaoView = new NegociacaoView('#tabNeg');
@@ -91,10 +94,10 @@ export class NegociacaoController {
 
             const listaNegImportar = await this._negociacaoService
                 .obterListaNegociacao( res => {
-                        if ( res.ok ) 
-                            return res;
-                        throw new Error(`Falha de resposta da API: ${res.statusText}`);
-                    });
+                    if ( res.ok ) 
+                        return res;
+                    throw new Error(`Falha de resposta da API: ${res.statusText}`);
+                });
     
             const listaNegAtual = this._negociacaoLista.paraArray();
             listaNegImportar
@@ -107,6 +110,23 @@ export class NegociacaoController {
         } catch (err) {
             this._mensagemView.update(err.message);
         }
+    }
+
+    async buscarCEP() {
+
+        try {
+
+            await this._negociacaoService
+            .obterCEP( res => {
+                if ( res.ok ) 
+                    return res;
+                throw new Error(`Falha de resposta da API: ${res.statusText}`);
+            }, this._inputCEP.val() );
+
+        } catch (err) {
+            this._mensagemView.update(err.message);
+        }
+
     }
 
 }    

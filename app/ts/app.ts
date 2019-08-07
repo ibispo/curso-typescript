@@ -5,8 +5,7 @@ const negCont = new NegociacaoController();
 // Usando JQuery
 $('.form').submit(negCont.adicionar.bind(negCont));
 $('#btnImport').click(negCont.importarDados.bind(negCont));
-
-
+$('#btnCEP').click(negCont.buscarCEP.bind(negCont));
 
 /*
 

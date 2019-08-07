@@ -21,6 +21,24 @@ System.register(["../models/index"], function (exports_1, context_1) {
                         throw new Error(`Falha ao acionar API de dados: ${err0.message}`);
                     });
                 }
+                obterCEP(handler, cep) {
+                    return fetch(`https://viacep.com.br/ws/${cep}/json`)
+                        .then(res => handler(res))
+                        .then(res => res.json())
+                        .then((dadosCEP) => {
+                        console.log(`
+Endereço: ${dadosCEP.logradouro} 
+Complemento: ${dadosCEP.complemento} 
+Bairro: ${dadosCEP.bairro} 
+Localidade: ${dadosCEP.localidade} - ${dadosCEP.uf}
+CEP: ${dadosCEP.cep}
+                `);
+                    })
+                        .catch(err0 => {
+                        console.log(err0);
+                        throw new Error(`Falha ao acionar API de CEP: ${err0.message}`);
+                    });
+                }
             };
             exports_1("NegociacaoService", NegociacaoService);
         }

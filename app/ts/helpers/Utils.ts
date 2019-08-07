@@ -32,3 +32,17 @@ console.log(xxx);
 const yyy = procToken(1234);
 console.log(yyy);
 */
+
+
+/*
+
+Temos as seguintes funções:
+
+A) var minhaFuncao = function() {};
+B) function minhaFuncao() {}
+C) var minhaFuncao = function minhaFuncao() {};
+
+Alternativa correta
+A, C são function expressions, enquanto B é uma function declaration
+
+*/
